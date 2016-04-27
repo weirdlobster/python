@@ -1,0 +1,34 @@
+#sbatch creator
+import glob, os
+
+print "What is organism 3-letter identifier?",
+organism = raw_input()
+print "How many files/arrays to consider?",
+max_array = raw_input()
+print "What number to start at? Type 1 as default"
+start_array = raw_input()
+rename = ('%s' + '%s' +'_' + '%s') % (organism, start_array, max_array)
+print (rename)
+
+file = open("template", "w")
+file.write("""#!/bin/bash
+""")
+for number in range(int(start_array), int(max_array)):
+    file.write("""sbatch """)
+    if number > 0 and number < 10:
+        newfilename = "%s.00%s" %(organism, number)
+        file.write(newfilename)
+
+    if number > 9 and number < 100:
+        newfilename = "%s.0%s" %(organism, number)
+        file.write(newfilename)
+
+    if number > 99 and number < 1000:
+        newfilename = "%s.%s" %(organism, number)
+        file.write(newfilename)
+    file.write(""".sh
+""")
+file.close()
+
+for filename in glob.iglob(os.path.join('template')):
+    os.rename(filename, rename + '.sh')
