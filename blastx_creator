@@ -1,0 +1,143 @@
+#open template and ask for array
+import glob, os
+
+#Get input file name and how many bins/scripts
+print "What is organism 3-letter identifier?",
+organism = raw_input()
+print "How many files/arrays to consider?",
+max_array = raw_input()
+print "What number to start at? Type 1 as default"
+start_array = raw_input()
+
+#decide on the total size of scripts to make
+#int() makes the number into integer from string
+for number in range(int(start_array), int(max_array)):
+    #split off because of formatting of MaxBin
+    #single, double and triple digit; new filename is the only real difference
+    if number > 0 and number < 10:
+        newfilename = "%s.00%s" %(organism, number)
+        print "The new file name is: %s" % newfilename
+        file = open("template", "w")
+        file.write(
+"""#!/bin/bash
+#
+#SBATCH --job-name="""
+        )
+        file.write(newfilename)
+        file.write("""
+#SBATCH --partition=high
+#SBATCH --nodes=1
+#SBATCH -N 1
+#SBATCH --ntasks-per-node=24
+#SBATCH --cpus-per-task=1
+#SBATCH -o """
+        )
+        file.write(newfilename)
+        #couldn't figure out how to substitute in triple quote
+        file.write(
+""".out # File to which STDOUT will be written
+#SBATCH -e """
+        )
+        file.write(newfilename)
+        file.write(
+""".err # File to which STDERR will be written
+
+blastx -query """
+        )
+        file.write(newfilename)
+        file.write(
+""".fasta -db /group/dawsonlab/blobology/blastdb2015/nr -evalue 1e-5 -num_threads 24 -max_target_seqs 1 -outfmt "6 qseqid qgi qlen sseqid sgi slen qstart qend sstart send evalue bitscore score length pident nident positive gaps staxids stitle" -out """
+        )
+        file.write(newfilename)
+        file.write(
+""".blastx.xls"""
+        )
+        #close the file before further manipulation
+        file.close()
+        #rename from template to a shell with specific name
+        for filename in glob.iglob(os.path.join('template')):
+            os.rename(filename, newfilename + '.sh')
+
+    if number > 9 and number < 100:
+        newfilename = "%s.0%s" %(organism, number)
+        print "The new file name is: %s" % newfilename
+        file = open("template", "w")
+        file.write(
+"""#!/bin/bash
+#
+#SBATCH --job-name="""
+        )
+        file.write(newfilename)
+        file.write("""
+#SBATCH --partition=high
+#SBATCH --nodes=1
+#SBATCH -N 1
+#SBATCH --ntasks-per-node=24
+#SBATCH --cpus-per-task=1
+#SBATCH -o """
+        )
+        file.write(newfilename)
+        file.write(
+""".out # File to which STDOUT will be written
+#SBATCH -e """
+        )
+        file.write(newfilename)
+        file.write(
+""".err # File to which STDERR will be written
+
+blastx -query """
+        )
+        file.write(newfilename)
+        file.write(
+""".fasta -db /group/dawsonlab/blobology/blastdb2015/nr -evalue 1e-5 -num_threads 24 -max_target_seqs 1 -outfmt "6 qseqid qgi qlen sseqid sgi slen qstart qend sstart send evalue bitscore score length pident nident positive gaps staxids stitle" -out """
+        )
+        file.write(newfilename)
+        file.write(
+""".blastx.xls"""
+        )
+
+        file.close()
+        for filename in glob.iglob(os.path.join('template')):
+            os.rename(filename, newfilename + '.sh')
+
+    if number > 99 and number < 1000:
+        newfilename = "%s.%s" %(organism, number)
+        print "The new file name is: %s" % newfilename
+        file = open("template", "w")
+        file.write(
+"""#!/bin/bash
+#
+#SBATCH --job-name="""
+        )
+        file.write(newfilename)
+        file.write("""
+#SBATCH --partition=high
+#SBATCH --nodes=1
+#SBATCH -N 1
+#SBATCH --ntasks-per-node=24
+#SBATCH --cpus-per-task=1
+#SBATCH -o """
+        )
+        file.write(newfilename)
+        file.write(
+""".out # File to which STDOUT will be written
+#SBATCH -e """
+        )
+        file.write(newfilename)
+        file.write(
+""".err # File to which STDERR will be written
+
+blastx -query """
+        )
+        file.write(newfilename)
+        file.write(
+""".fasta -db /group/dawsonlab/blobology/blastdb2015/nr -evalue 1e-5 -num_threads 24 -max_target_seqs 1 -outfmt "6 qseqid qgi qlen sseqid sgi slen qstart qend sstart send evalue bitscore score length pident nident positive gaps staxids stitle" -out """
+        )
+        file.write(newfilename)
+        file.write(
+""".blastx.xls"""
+        )
+
+        file.close()
+        for filename in glob.iglob(os.path.join('template')):
+            os.rename(filename, newfilename + '.sh')
